@@ -32,38 +32,38 @@ public class ScheduleConfig {
     }
 
 
-    @Bean(name="myJobTrigger")
+    @Bean(name = "myJobTrigger")
     public CronTriggerFactoryBean startMyJob() throws SchedulerException {
         logger.info("myJob定时任务开始启动......");
         JobDetail jobDetail = JobBuilder.newJob(MyJob.class)
                 .withIdentity("myJob", "myJobGroup")
                 .build();
-        CronTriggerFactoryBean bean=createCronTrigger(jobDetail, "myJobTrigger",
+        CronTriggerFactoryBean bean = createCronTrigger(jobDetail,
                 "0/10 * * * * ?");
         logger.info("myJob定时任务启动完成......");
         return bean;
     }
 
-    @Bean(name="demoJobTrigger")
-    public CronTriggerFactoryBean  startDemoJob() throws SchedulerException {
+    @Bean(name = "demoJobTrigger")
+    public CronTriggerFactoryBean startDemoJob() throws SchedulerException {
         logger.info("demoJob定时任务开始启动......");
         JobDetail jobDetail = JobBuilder.newJob(DemoJob.class)
                 .withIdentity("demojob", "myJobGroup")
                 .build();
-        CronTriggerFactoryBean bean=createCronTrigger(jobDetail,"demoJobTrigger",
+        CronTriggerFactoryBean bean = createCronTrigger(jobDetail,
                 "0/30 * * * * ?");
         logger.info("demoJob定时任务启动完成......");
         return bean;
     }
 
-    private CronTriggerFactoryBean createCronTrigger(JobDetail jobDetail, String triggerName, String cronExpression) {
+    private CronTriggerFactoryBean createCronTrigger(JobDetail jobDetail, String cronExpression) {
         CronTriggerFactoryBean factoryBean = new CronTriggerFactoryBean();
         factoryBean.setJobDetail(jobDetail);
         factoryBean.setCronExpression(cronExpression);
         return factoryBean;
     }
 
-    @Bean(initMethod="start",destroyMethod="destroy")
+    @Bean(initMethod = "start", destroyMethod = "destroy")
     public SchedulerFactoryBean schedulerFactoryBean(JobFactory jobFactory, Trigger... triggers) throws IOException {
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
         factory.setOverwriteExistingJobs(true);
